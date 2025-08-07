@@ -1,6 +1,18 @@
 import { AccessToken } from 'livekit-server-sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Handle CORS preflight requests
+export async function OPTIONS(request: NextRequest) {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    });
+}
+
 export async function POST(request: NextRequest) {
     try {
         const { roomId, username } = await request.json();
@@ -8,7 +20,14 @@ export async function POST(request: NextRequest) {
         if (!roomId || !username) {
             return NextResponse.json(
                 { error: 'roomId and username are required' },
-                { status: 400 }
+                {
+                    status: 400,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    },
+                }
             );
         }
 
@@ -30,12 +49,25 @@ export async function POST(request: NextRequest) {
 
         const token = await at.toJwt();
 
-        return NextResponse.json({ token });
+        return NextResponse.json({ token }, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+        });
     } catch (error) {
         console.error('Error generating token:', error);
         return NextResponse.json(
             { error: 'Failed to generate token' },
-            { status: 500 }
+            {
+                status: 500,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                },
+            }
         );
     }
 }
