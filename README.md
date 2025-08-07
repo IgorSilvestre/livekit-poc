@@ -1,6 +1,34 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+This project integrates with LiveKit for real-time communication features.
+
 ## Getting Started
+
+### Option 1: Docker Compose (Recommended)
+
+Run the entire stack (Next.js app + LiveKit server) using Docker Compose:
+
+```bash
+# Build and start both services
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+```
+
+**Access URLs:**
+- Next.js Application: [http://localhost:9000](http://localhost:9000)
+- LiveKit Server: [http://localhost:7880](http://localhost:7880)
+- LiveKit WebSocket: `ws://localhost:7880`
+
+**Development Credentials:**
+- API Key: `devkey`
+- API Secret: `secret`
+
+### Option 2: Local Development
 
 First, run the development server:
 

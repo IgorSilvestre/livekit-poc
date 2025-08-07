@@ -1,0 +1,1 @@
+- use bun, not npm as package manager

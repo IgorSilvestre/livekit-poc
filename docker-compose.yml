@@ -1,0 +1,32 @@
+services:
+  livekit-server:
+    image: livekit/livekit-server
+    container_name: livekit-server
+    ports:
+      - "7880:7880"
+      - "7881:7881/udp"
+    command: --dev --bind 0.0.0.0
+    networks:
+      - livekit-network
+    restart: unless-stopped
+
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: livekit-poc-app
+    ports:
+      - "9000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - LIVEKIT_URL=ws://livekit-server:7880
+    depends_on:
+      - livekit-server
+    networks:
+      - livekit-network
+    restart: unless-stopped
+
+networks:
+  livekit-network:
+    driver: bridge
